@@ -1,0 +1,14 @@
+{
+  "name": "js-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron . --no-sandbox"
+  },
+  "author": "TUBE-GULL",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^26.3.0"
+  }
+}
