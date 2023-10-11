@@ -1,116 +1,179 @@
-// const { ipcRenderer } = require('electron');
 const cardContainer = document.querySelectorAll('.card-container');
-const cards = document.querySelectorAll('.back');
+const cardBack = document.querySelectorAll('.back');
 const card = document.querySelectorAll('.card');
-const arrayCards = [];
-const minMAX = [1, 8];
-
-
-
-const openCard = ({ frontCard, backCard }) => {
-    frontCard.style.transform = 'rotateY(180deg)';
-    backCard.style.transform = 'rotateY(360deg)';
-};
-const closeCard = ({ frontCard, backCard }) => {
-    frontCard.style.transform = 'rotateY(0deg)';
-    backCard.style.transform = 'rotateY(180deg)';
-}
+const arrayCards = [];  // массив значений чтобы карточки не повторялись 
+const minMAX = [1, 8];  // кол карточек 
+let numberCards = 16;   //количесвто ячеек 
+let testcard = null;
+let ChecksСard = null;
 
 const getImage = (imageId, folderName) => {
     return `url(assets/icons/${folderName}/image${imageId}.png)`
 };
-
-const randomNum = (min, max) => {
+const randomNum = ([min, max]) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
-
+const openCard = (card) => {
+    card.firstElementChild.style.transform = 'rotateY(180deg)';
+    card.lastElementChild.style.transform = 'rotateY(360deg)';
+};
+const closeCard = (card) => {
+    card.firstElementChild.style.transform = 'rotateY(0deg)';
+    card.lastElementChild.style.transform = 'rotateY(180deg)';
+};
 const checkForTwoNumbers = (array, number) => {
-    let count = 0;
+    let result = 0;
     for (const el of array) {
         if (el === number) {
-            count++;
-            if (count > 2) {
-                return false;
+            if (result > 2) {
+                break;
+            }
+            result++
+        }
+    };
+    return result < 2;
+};
+const randomImgCards = (cards) => {
+    let num;
+    cards.forEach((card, index) => {
+        while (arrayCards.length < numberCards) {
+            num = randomNum(minMAX);
+            if (checkForTwoNumbers(arrayCards, num)) {
+                arrayCards.push(num);
             }
         }
-    }
-    return true;
-};
-
-const randomImgCards = (cards) => {
-    cards.forEach((card) => {
-        let num;
-        do {
-            num = randomNum(...minMAX);
-            arrayCards.push(num)
-        } while (!checkForTwoNumbers(arrayCards, num));
-        card.style.backgroundImage = getImage(num, 'easy')
-        card.style.backgroundPosition = '0 15px';
+        card.style.backgroundImage = getImage(arrayCards[index], 'easy');
+        card.style.backgroundPosition = '15px 20px';
         card.style.backgroundRepeat = 'no-repeat';
-        card.style.backgroundSize = '100% 80%';
+        card.style.backgroundSize = '80% 80%';
     });
 };
-randomImgCards(cards);
-
-
-
-
-const oneCard = {
-    frontCard: null,
-    backCard: null,
-    indexCard: null,
-    offNoCard: false
-};
-const secondCard = {
-    frontCard: null,
-    backCard: null,
-    indexCard: null,
-    offNoCard: false
-};
-
-// let isFlipped = false;
-// let comparisonСard;
-// let doubleClickLock = false;
-let start = false;
+randomImgCards(cardBack);
 cardContainer.forEach((card, index) => {
     card.addEventListener('click', () => {
-
-        if (!start) {
-            console.log('1')
-            oneCard.frontCard = card.querySelector('.front');
-            oneCard.backCard = card.querySelector('.back');
-            oneCard.indexCard = index;
-            start = true
-            openCard(oneCard);
-        } else {
-
-            if (oneCard.indexCard === index) {
-                console.log('2.1')
-                setTimeout(() => {
-                    closeCard(oneCard);
-                    start = false;
-                }, 100);
-                return oneCard.indexCard = null
+        if (card.getAttribute('data-disabled') !== 'true') {
+            if (testcard === null) {
+                testcard = index
+                ChecksСard = arrayCards[index]
+                openCard(card)
+                card.setAttribute('data-disabled', 'true');
             } else {
-                console.log('2.2')
-                secondCard.frontCard = card.querySelector('.front');
-                secondCard.backCard = card.querySelector('.back');
-                secondCard.indexCard = index;
-                openCard(secondCard);
-            };
-            if (oneCard.indexCard !== secondCard.indexCard) {
-                console.log('2.3')
-                setTimeout(() => {
-                    closeCard(oneCard);
-                    closeCard(secondCard)
-                    start = false;
-                }, 100);
+                if (ChecksСard === arrayCards[index]) {
+                    openCard(card)
+                    cardContainer[index].setAttribute('data-disabled', 'true');
+                    cardContainer[testcard].setAttribute('data-disabled', 'true');
+                    return testcard = null;
+                } else if (ChecksСard !== arrayCards[index]) {
+                    openCard(card)
+                    setTimeout(() => {
+                        closeCard(card)
+                        closeCard(cardContainer[testcard])
+                        cardContainer[index].removeAttribute('data-disabled');
+                        cardContainer[testcard].removeAttribute('data-disabled');
+                        return testcard = null;
+                    }, 500)
+                }
             }
-            start = !start;
         }
     });
 });
-const minimize_Btn_Click = (event) => {
+// 4х4
+// 6х6
+// 8х8
+// line            строка
+// forduplication  ячейка
+
+const EASY = {
+    easyLine: 4,
+    easyForduplication: 4,
+    min: 1,
+    max: 8,
+    numberCards: 16,
+};
+const AVERAGE = {
+    averageLine: 4,
+    averageForduplication: 6,
+    min: 1,
+    max: 12,
+    numberCards: 24,
+};
+const DIFFICULT = {
+    difficulLine: 6,
+    difficulForduplication: 6,
+    min: 1,
+    max: 18,
+    numberCards: 24,
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+    const difficultyLevel = document.getElementById(".difficultyLevel");
+    const CELL = document.querySelector(".CELL");
+    const LINE = document.querySelector(".line");
+
+    difficultyLevel.addEventListener("change", function () {
+        let difficultyLevelValue = difficultyLevel.value;
+        let cell = 4;
+        let line = 4;
+
+        if (difficultyLevelValue === "1") {
+            line = EASY.difficulLine//ЛИНИИ 
+            cell = EASY.difficulForduplication//ЯЧЕЙКА 
+        } else if (difficultyLevelValue === "2") {
+            line = AVERAGE.difficulLine//ЛИНИИ 
+            cell = AVERAGE.difficulForduplication//ЯЧЕЙКА 
+        } else if (difficultyLevelValue === "3") {
+            line = DIFFICULT.difficulLine//ЛИНИИ 
+            cell = DIFFICULT.difficulForduplication//ЯЧЕЙКА 
+        }
+        // Обновляем содержимое элемента #fileCount
+        CELL.textContent += cell;
+        LINE.textContent += line;
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+inimize_Btn_Click = (event) => {
     ipcRenderer.send('minimize-window');
 };
 const close_Btn_Click = (event) => {
@@ -123,46 +186,88 @@ minimizeBtn.addEventListener('click', minimize_Btn_Click);
 closeBtn.addEventListener('click', close_Btn_Click);
 
 
+/** 
+ * 
+const comparisonOneCard = {
+    frontCard: null,
+    backCard: null,
+    index: null,
+    offOn: true,
+    block: 'auto',
 
-// const frontCard = card.querySelector('.front')
-// const backCard = card.querySelector('.back')
-// // newCardInIteration = card.lastElementChild.style.backgroundImage;
+};
+let comparisonTwoCard = {
+    front: null,
+    back: null,
+    index: null,
+    offOn: true,
+    block: 'auto',
+}
+let start = true;
+    const blockCard = (card) => {
+        card.style.pointerEvents = 'none';
+    };
+    const unblockCard = () => {
+        card.style.pointerEvents = 'auto'
+    };
 
-//     if (!isFlipped) {
-//         mapSpread()
-//         comparisonСard = newCardInIteration;
-//         previousCard.frontCard = card.querySelector('.front')
-//         previousCard.backCard = card.querySelector('.back')
-//         previousCard.indexCard = index;
-//     } else {
-//         doubleClickLock = true;
-//         if (previousCard.indexCard === index) {
-//             setTimeout(() => {
-//                 NOmapSpread(previousCard);
-//                 doubleClickLock = false;///<------------
-//                 return previousCard.indexCard = null
-//             }, 400);
-//         } else {
-//             mapSpread()
-//             currentCard.frontCard = card.querySelector('.front')
-//             currentCard.backCard = card.querySelector('.back')
-//         };
-//         if (comparisonСard !== newCardInIteration) {
-//             setTimeout(() => {
-//                 NOmapSpread(previousCard);
-//                 NOmapSpread(currentCard)
-//                 isFlipped = false;
-//                 doubleClickLock = false;///<------------
-//             }, 500);
-//         }
-//         doubleClickLock = false;
-//         // if (comparisonСard === newCardInIteration) {
-//         //     doubleClickLock = true; // Разрешаем нажатия снова
-//         // } else {
-//         //     doubleClickLock = false; // Блокируем нажатия до следующего клика
-//         // }
-//     }
-//     previousCard.card = card;
-//     isFlipped = !isFlipped;//true
-
-// });
+    const reset = () => {
+        setTimeout(() => {
+            comparisonOneCard.frontCard = null
+            comparisonOneCard.backCard = null
+            comparisonOneCard.index = null
+            comparisonOneCard.offOn = true
+            comparisonOneCard.block = 'auto'
+            comparisonTwoCard.front = null
+            comparisonTwoCard.back = null
+            comparisonTwoCard.index = null
+            comparisonTwoCard.offOn = true
+            comparisonTwoCard.block = 'auto'
+            start = true
+        }, 700)
+    };
+    if (start) {
+        console.log(1)
+        if (comparisonOneCard.offOn) {
+            comparisonOneCard.frontCard = card.querySelector('.front');
+            comparisonOneCard.backCard = card.querySelector('.back');
+            comparisonOneCard.index = arrayCards[index]
+            comparisonOneCard.offOn = false
+            comparisonOneCard.block = 'none'
+            openCard()
+            // card.disabled = true;
+            start = false
+        }
+    } else {
+        console.log(2)
+        if (comparisonOneCard.index === arrayCards[index]) {
+            if (comparisonTwoCard.offOn) {
+                console.log('ровны !')
+                comparisonTwoCard.frontCard = card.querySelector('.front');
+                comparisonTwoCard.backCard = card.querySelector('.back');
+                comparisonTwoCard.index = arrayCards[index]
+                comparisonTwoCard.offOn = false
+                comparisonOneCard.block = 'none'
+                openCard()
+                // card.disabled = true;
+                return reset()
+            }
+        };
+        if (comparisonOneCard.index !== arrayCards[index]) {
+            if (comparisonTwoCard.offOn) {
+                console.log('не ровны !')
+                comparisonTwoCard.frontCard = card.querySelector('.front');
+                comparisonTwoCard.backCard = card.querySelector('.back');
+                comparisonTwoCard.offOn = false
+                comparisonTwoCard.block = 'none'
+                openCard()
+                setTimeout(() => {
+                    closeCard(comparisonTwoCard);
+                    closeCard(comparisonOneCard);
+                    unblockCard(card);
+                }, 500);
+                reset()
+            }
+        }
+    }
+}); */

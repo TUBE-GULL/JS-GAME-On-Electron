@@ -10,7 +10,7 @@ const createWindow = () => {
         height: 750,
         // frame: false,
         // titleBarStyle: 'hidden',
-        // icon: (path.join(__dirname, 'assets/icons/Icon_calculator.png')),
+        icon: (path.join(__dirname, 'assets/icons/icon.png')),
         // resizable: false,
         // webPreferences: {
         //     nodeIntegration: true,

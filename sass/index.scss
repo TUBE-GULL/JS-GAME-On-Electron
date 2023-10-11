@@ -8,7 +8,11 @@
 
   body {
 
-    background-color: #FFCAAF;
+    background-image: url(assets/icons/BG-easy.png);
+    backdrop-filter: blur(2px);
+    // background-position: 30 30;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
   }
 
   .neader {
@@ -79,10 +83,16 @@
         border-radius: 15px;
         position: absolute;
         backface-visibility: hidden;
-        transition: transform 0.1s;
+        transition: transform 0.6s;
       }
 
       .back {
+        background: rgba(255, 255, 255, 0.42);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        backdrop-filter: blur(30px);
+        -webkit-backdrop-filter: blur(4px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
         position: 0 100px;
         width: 100%;
         height: 100%;
@@ -91,11 +101,16 @@
     }
 
     .front {
-      background: #ee5509;
+      background: rgba(255, 255, 255, 0.42);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(4px);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
       background-image: url(assets/icons/question.png);
-      background-position: 17 20;
+      background-position: 30 30;
       background-repeat: no-repeat;
-      background-size: 80% 80%;
+      background-size: 60% 60%;
     }
 
   }
