@@ -1,3 +1,7 @@
+0.0.4 added visual for the first level
+![Image Calculator](img/0.0.4.png)
+
+
 0.0.3 the main function has been rewritten and now works correctly now we need to create 2 new levels
       "I think it will be interesting !"
 
