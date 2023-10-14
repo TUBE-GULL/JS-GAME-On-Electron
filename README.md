@@ -1,4 +1,8 @@
-0.0.5
+0.0.6 everything is ready and everything works, all that remains is to package it and test for minor bugs
+
+- work with css
+
+  0.0.5
 
 ![Image Calculator](img/0.0.4.png)
 

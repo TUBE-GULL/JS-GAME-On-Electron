@@ -6,8 +6,8 @@ let win
 
 const createWindow = () => {
 	win = new BrowserWindow({
-		width: 650,
-		height: 750,
+		width: 800,
+		height: 800,
 		// frame: false,
 		// titleBarStyle: 'hidden',
 		icon: path.join(__dirname, 'assets/icons/icon.png'),
