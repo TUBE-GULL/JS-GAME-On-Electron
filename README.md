@@ -1,8 +1,13 @@
 0.0.6 everything is ready and everything works, all that remains is to package it and test for minor bugs
+Work has been done to combine the main function of random placement of cards and the level function that sets the number of cells
 
-- work with css
+left to do
 
-  0.0.5
+1. customize CSS styles
+2. customize the electronic window
+3. search for bugs
+
+0.0.5
 
 ![Image Calculator](img/0.0.4.png)
 
