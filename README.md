@@ -1,6 +1,7 @@
 installation
 
 1)install " npm i " dependencies
+
 2)conversion " npm run build "
 
 ![Image Calculator](img/1.0.1.png)
