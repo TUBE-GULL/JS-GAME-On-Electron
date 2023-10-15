@@ -4,11 +4,13 @@
   "description": "",
   "main": "src/main.js",
   "scripts": {
+    "build": "electron-builder",
     "start": "electron . --no-sandbox"
   },
   "author": "TUBE-GULL",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^26.3.0"
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4"
   }
 }
