@@ -3,7 +3,7 @@ installation
 1)install " npm i " dependencies
 2)conversion " npm run build "
 
-![Watch the video](./img/video.webm)
+![Watch the video](./img/NVIDIA_Share_YGnaSHGL3G.gif)
 
 ![Image Calculator](img/1.0.1.png)
 ![Image Calculator](img/1.0.2.png)
