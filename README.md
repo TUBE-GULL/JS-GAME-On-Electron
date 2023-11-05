@@ -5,9 +5,9 @@ installation
 
 ![Watch the video](./img/NVIDIA_Share_YGnaSHGL3G.gif)
 
-![Image Calculator](img/1.0.1.png)
+<!-- ![Image Calculator](img/1.0.1.png)
 ![Image Calculator](img/1.0.2.png)
-![Image Calculator](img/1.0.3.png)
+![Image Calculator](img/1.0.3.png) -->
 ------------------------finished project---------------------------
 
 1.0.0 The project is ready
